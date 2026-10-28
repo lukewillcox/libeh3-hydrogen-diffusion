@@ -1,0 +1,54 @@
+<!-- input.xml -->
+<simulation verbosity="medium">
+  
+  <!-- Output files -->
+  <output prefix="xtb_pimd">
+    <properties stride="10" filename="simulation.out">
+      step, time{picosecond}, temperature{kelvin}, 
+      potential{electronvolt}, kinetic_md{electronvolt}, 
+      kinetic_cv{electronvolt}, conserved{electronvolt}
+    </properties>
+    <trajectory stride="100" filename="simulation.xyz" format="xyz" 
+                atoms="all" beads="all" cell="full" positions="true"/>
+  </output>
+
+  <!-- System definition -->
+  <system>
+    <initialize nbeads="16">
+      <file mode="xyz">initial.xyz</file>
+    </initialize>
+    
+    <!-- Force field socket connection -->
+    <forces>
+      <force forcefield="xtb">
+        <socket address="localhost" port="31415" protocol="inet"/>
+      </force>
+    </forces>
+    
+    <!-- Simulation box (adjust to your system) -->
+    <cell>
+      <a units="angstrom">15.0</a>
+      <b units="angstrom">15.0</b>
+      <c units="angstrom">15.0</c>
+    </cell>
+    
+    <!-- Atom masses (in amu) -->
+    <masses>
+      <massa units="amu">1.008</massa>   <!-- Hydrogen -->
+      <massb units="amu">16.00</massb>   <!-- Oxygen -->
+    </masses>
+  </system>
+
+  <!-- Dynamics configuration -->
+  <dynamics mode="nvt">
+    <timestep units="femtosecond">0.5</timestep>
+    <steps>50000</steps>
+    
+    <!-- PILE-G thermostat for ring polymers -->
+    <thermostat mode="pile_g">
+      <tau units="femtosecond">100.0</tau>
+      <temperature units="kelvin">340.0</temperature>
+    </thermostat>
+  </dynamics>
+
+</simulation>

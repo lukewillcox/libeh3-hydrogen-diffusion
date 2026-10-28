@@ -1,0 +1,4 @@
+ase>=3.22
+numpy
+matplotlib
+xtb-python  # install via conda-forge: conda install -c conda-forge xtb-python
